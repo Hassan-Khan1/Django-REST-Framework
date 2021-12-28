@@ -22,7 +22,24 @@ class SteamPlatformAV(APIView):
       return Response(serializer.data)
     else:
       return Response(serializer.errors)
+class StreamPlatFormDetailAV(APIView):
 
+  def get(self,request,pk):
+    try:
+      platform = SteamPlatform.objects.all(pk=pk)
+    except SteamPlatform.DoesNotExist:
+      return Response({'Error': 'Movie not Found'},status=status.HTTP_404_NOT_FOUND)
+    serializer = SteamPlatformSerializers(platform)
+    return Response(serializer.data)
+
+  def put(self,request,pk):
+    platform = SteamPlatform.objects.all(pk=pk)
+    serializer = SteamPlatformSerializers(platform,data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    else:
+      return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class WatchListAV(APIView):
 
