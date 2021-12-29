@@ -5,10 +5,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework import mixins
+from rest_framework import mixins,viewsets,generics
 from watchlist_app.api.serializers import (ReviewSerializers, WatchListSerializers,
                                            SteamPlatformSerializers)
+from django.shortcuts import get_object_or_404
 
 
 class  ReviewCreate(generics.CreateAPIView):
@@ -46,6 +46,19 @@ class ReviewDetial(generics.RetrieveUpdateDestroyAPIView):
 #         return self.list(request, *args, **kwargs)
 #     def post(self, request, *args, **kwargs):
 #         return self.create(request, *args, **kwargs)
+
+class StreamPlatformAS(viewsets.ViewSet):
+
+    def list(self, request):
+      queryset = SteamPlatform.objects.all()
+      serializer = SteamPlatformSerializers(queryset, many=True)
+      return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+      queryset = SteamPlatform.objects.all()
+      WatchList = get_object_or_404(queryset, pk=pk)
+      serializer = SteamPlatformSerializers(WatchList)
+      return Response(serializer.data)
 
 class SteamPlatformAV(APIView):
 

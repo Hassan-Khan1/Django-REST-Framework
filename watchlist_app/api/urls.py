@@ -3,19 +3,25 @@
 
 from django.contrib import admin
 from django.urls import path,include
-
+from rest_framework import routers
+from rest_framework.routers import DefaultRouter
 from watchlist_app.api.views import (ReviewCreate, WatchListAV,WatchDetailsAV,SteamPlatformAV,
                                     StreamPlatFormDetailAV,ReviewList,ReviewDetial,
-                                    ReviewCreate
+                                    ReviewCreate,StreamPlatformAS
                                     )
-
+router = DefaultRouter()
+router.register('stream',StreamPlatformAS,basename= 'streamplatform')
 
 urlpatterns = [
 
     path('list/', WatchListAV.as_view(), name='movie_list'),
     path('<int:pk>', WatchDetailsAV.as_view(), name='movie_details'),
-    path('steam/', SteamPlatformAV.as_view(), name='steam'),
-    path('steam/<int:pk>', StreamPlatFormDetailAV.as_view(), name='steam-detials'),
+
+
+# Routers
+    path('',include(router.urls)),
+    # path('steam/', SteamPlatformAV.as_view(), name='steam'),
+    # path('steam/<int:pk>', StreamPlatFormDetailAV.as_view(), name='steam-detials'),
 
 # Generic Views
 
