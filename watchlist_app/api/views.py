@@ -60,6 +60,14 @@ class StreamPlatformAS(viewsets.ViewSet):
       serializer = SteamPlatformSerializers(WatchList)
       return Response(serializer.data)
 
+    def create(self,request):
+      serializer = SteamPlatformSerializers(data= request.data)
+      if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+      else:
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
 class SteamPlatformAV(APIView):
 
   def get(self,request):
@@ -75,6 +83,7 @@ class SteamPlatformAV(APIView):
     else:
       return Response(serializer.errors)
 
+  
 
 
 class StreamPlatFormDetailAV(APIView):
