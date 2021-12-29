@@ -47,26 +47,33 @@ class ReviewDetial(generics.RetrieveUpdateDestroyAPIView):
 #     def post(self, request, *args, **kwargs):
 #         return self.create(request, *args, **kwargs)
 
-class StreamPlatformAS(viewsets.ViewSet):
+## Model ViewSets
 
-    def list(self, request):
-      queryset = SteamPlatform.objects.all()
-      serializer = SteamPlatformSerializers(queryset, many=True)
-      return Response(serializer.data)
+class StreamPlatformAS(viewsets.ReadOnlyModelViewSet):
+  queryset = SteamPlatform.objects.all()
+  serializer_class = SteamPlatformSerializers
 
-    def retrieve(self, request, pk=None):
-      queryset = SteamPlatform.objects.all()
-      WatchList = get_object_or_404(queryset, pk=pk)
-      serializer = SteamPlatformSerializers(WatchList)
-      return Response(serializer.data)
+# # View Sets
+# class StreamPlatformAS(viewsets.ViewSet):
 
-    def create(self,request):
-      serializer = SteamPlatformSerializers(data= request.data)
-      if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-      else:
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+#     def list(self, request):
+#       queryset = SteamPlatform.objects.all()
+#       serializer = SteamPlatformSerializers(queryset, many=True)
+#       return Response(serializer.data)
+
+#     def retrieve(self, request, pk=None):
+#       queryset = SteamPlatform.objects.all()
+#       WatchList = get_object_or_404(queryset, pk=pk)
+#       serializer = SteamPlatformSerializers(WatchList)
+#       return Response(serializer.data)
+
+#     def create(self,request):
+#       serializer = SteamPlatformSerializers(data= request.data)
+#       if serializer.is_valid():
+#         serializer.save()
+#         return Response(serializer.data)
+#       else:
+#         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class SteamPlatformAV(APIView):
 
