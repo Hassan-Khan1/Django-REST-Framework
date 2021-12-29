@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models.deletion import CASCADE
 from django.db.models.fields import CharField
 from django.core.validators import MinValueValidator,MaxValueValidator
+from django.contrib.auth.models import User
+
 # Create your models here.
 class SteamPlatform(models.Model):
   name = models.CharField(max_length=30)
@@ -24,9 +26,10 @@ class WatchList(models.Model):
 
 
 class Review(models.Model):
+  review_user = models.ForeignKey(User,on_delete=models.CASCADE)
   rating =  models.PositiveIntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
   description = models.CharField(max_length=200,null=True)
-  watchlist = models.ForeignKey(WatchList,on_delete=CASCADE,related_name='reviews')
+  watchlist = models.ForeignKey(WatchList,on_delete=models.CASCADE,related_name='reviews')
   created = models.DateTimeField(auto_now_add=True)
   update = models.DateTimeField(auto_now=True)
   active = models.BooleanField(default=True)

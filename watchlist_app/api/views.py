@@ -9,16 +9,24 @@ from rest_framework import mixins,viewsets,generics
 from watchlist_app.api.serializers import (ReviewSerializers, WatchListSerializers,
                                            SteamPlatformSerializers)
 from django.shortcuts import get_object_or_404
-
+from rest_framework.exceptions import ValidationError
 
 class  ReviewCreate(generics.CreateAPIView):
   serializer_class = ReviewSerializers
 
+  def get_queryset(self):
+      return Review.objects.all()
+
   def perform_create(self, serializer):
     pk = self.kwargs.get('pk')
-    movie = WatchList.objects.get(pk=pk)
-    serializer.save(watchlist=movie)
+    watchlist = WatchList.objects.get(pk=pk)
 
+    review_user = self.request.user
+    review_query = Review.objects.filter(watchlist= watchlist,review_user=review_user)
+
+    if review_query.exists():
+      raise ValidationError("You have already reviewed this watch!")
+    serializer.save(watchlist=watchlist , review_user = review_user)
 
 class ReviewList(generics.ListAPIView):
   # queryset =  Review.objects.all()
@@ -49,7 +57,7 @@ class ReviewDetial(generics.RetrieveUpdateDestroyAPIView):
 
 ## Model ViewSets
 
-class StreamPlatformAS(viewsets.ReadOnlyModelViewSet):
+class StreamPlatformAS(viewsets.ModelViewSet):
   queryset = SteamPlatform.objects.all()
   serializer_class = SteamPlatformSerializers
 

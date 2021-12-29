@@ -7,8 +7,8 @@ from watchlist_app.models import Review, WatchList,SteamPlatform
 
 
 class ReviewSerializers(serializers.ModelSerializer):
-
-  class Meta:
+  review_user = serializers.StringRelatedField(read_only=True)
+  class Meta:  
     model = Review
     # fields = "__all__"
     exclude= ('watchlist',)
