@@ -4,10 +4,7 @@ from rest_framework import serializers
 
 from watchlist_app.models import WatchList,SteamPlatform
 
-class SteamPlatformSerializers(serializers.ModelSerializer):
-  class Meta:
-    model = SteamPlatform
-    fields = "__all__"
+
 
 class WatchListSerializers(serializers.ModelSerializer):
   # len_name = serializers.SerializerMethodField()
@@ -16,6 +13,12 @@ class WatchListSerializers(serializers.ModelSerializer):
     model =  WatchList
     fields = "__all__"
 
+class SteamPlatformSerializers(serializers.ModelSerializer):
+  watchlist = WatchListSerializers(many=True,read_only= True)
+
+  class Meta:
+    model = SteamPlatform
+    fields = "__all__"
 
   # def get_len_name(self,object):
   #   return len(object.name)
