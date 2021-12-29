@@ -10,24 +10,42 @@ from rest_framework import mixins
 from watchlist_app.api.serializers import (ReviewSerializers, WatchListSerializers,
                                            SteamPlatformSerializers)
 
-class ReviewDetial(mixins.RetrieveModelMixin, generics.GenericAPIView):
+
+class  ReviewCreate(generics.CreateAPIView):
+  serializer_class = ReviewSerializers
+
+  def perform_create(self, serializer):
+    pk = self.kwargs.get('pk')
+    movie = WatchList.objects.get(pk=pk)
+    serializer.save(watchlist=movie)
+
+
+class ReviewList(generics.ListAPIView):
+  # queryset =  Review.objects.all()
+  serializer_class = ReviewSerializers
+
+  def get_queryset(self):
+    pk = self.kwargs['pk']
+    return Review.objects.filter(watchlist=pk)
+
+
+class ReviewDetial(generics.RetrieveUpdateDestroyAPIView):
   queryset =  Review.objects.all()
   serializer_class = ReviewSerializers
-  
-  def get(self, request, *args, **kwargs):
-      return self.retrieve(request, *args, **kwargs)
 
+# class ReviewDetial(mixins.RetrieveModelMixin, generics.GenericAPIView):
+#   queryset =  Review.objects.all()
+#   serializer_class = ReviewSerializers
+#   def get(self, request, *args, **kwargs):
+#       return self.retrieve(request, *args, **kwargs)
 
-class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    
-    queryset =  Review.objects.all()
-    serializer_class = ReviewSerializers
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+# class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+#     queryset =  Review.objects.all()
+#     serializer_class = ReviewSerializers
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
 
 class SteamPlatformAV(APIView):
 

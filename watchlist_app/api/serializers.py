@@ -10,13 +10,13 @@ class ReviewSerializers(serializers.ModelSerializer):
 
   class Meta:
     model = Review
-    fields = "__all__"
-
+    # fields = "__all__"
+    exclude= ('watchlist',)
 
 class WatchListSerializers(serializers.ModelSerializer):
   # len_name = serializers.SerializerMethodField()
   reviews = ReviewSerializers(many=True,read_only=True)
-  
+
   class Meta:
     model =  WatchList
     fields = "__all__"
