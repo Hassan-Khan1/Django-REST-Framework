@@ -22,18 +22,21 @@ class SteamPlatformAV(APIView):
       return Response(serializer.data)
     else:
       return Response(serializer.errors)
+
+
+
 class StreamPlatFormDetailAV(APIView):
 
   def get(self,request,pk):
     try:
-      platform = SteamPlatform.objects.all(pk=pk)
+      platform = SteamPlatform.objects.get(pk=pk)
     except SteamPlatform.DoesNotExist:
       return Response({'Error': 'Movie not Found'},status=status.HTTP_404_NOT_FOUND)
     serializer = SteamPlatformSerializers(platform)
     return Response(serializer.data)
 
   def put(self,request,pk):
-    platform = SteamPlatform.objects.all(pk=pk)
+    platform = SteamPlatform.objects.get(pk=pk)
     serializer = SteamPlatformSerializers(platform,data=request.data)
     if serializer.is_valid():
       serializer.save()
@@ -41,14 +44,16 @@ class StreamPlatFormDetailAV(APIView):
     else:
       return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+  def delete(self,request,pk):
+    platform = SteamPlatform.objects.get(pk=pk)
+    platform.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class WatchListAV(APIView):
 
   def get(self,request):
     movies = WatchList.objects.all()
-    print("dasd")
     serializer = WatchListSerializers(movies, many=True)
-    print("dasd")
-
     return Response(serializer.data)
 
   def post(self,request):
@@ -65,7 +70,7 @@ class WatchDetailsAV(APIView):
     try:
       movie = WatchList.objects.get(pk=pk)
     except WatchList.DoesNotExist:
-      return Response({'Error': 'Movie not Found'},status=status.HTTP_404_NOT_FOUND)
+      return Response({'Error': 'Not Found'},status=status.HTTP_404_NOT_FOUND)
     serializer = WatchListSerializers(movie)
     return Response(serializer.data)
 
@@ -78,6 +83,11 @@ class WatchDetailsAV(APIView):
       return Response(serializer.data)
     else:
       return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self,request,pk):
+    movie = WatchList.objects.get(pk=pk)
+    movie.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 # @api_view(['GET','POST'])
 # def movie_list(request):
