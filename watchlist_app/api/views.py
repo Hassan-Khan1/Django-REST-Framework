@@ -10,6 +10,7 @@ from watchlist_app.api.serializers import (ReviewSerializers, WatchListSerialize
                                            SteamPlatformSerializers)
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
 
 class  ReviewCreate(generics.CreateAPIView):
   serializer_class = ReviewSerializers
@@ -31,7 +32,7 @@ class  ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListAPIView):
   # queryset =  Review.objects.all()
   serializer_class = ReviewSerializers
-
+  permission_classes = [IsAuthenticated]
   def get_queryset(self):
     pk = self.kwargs['pk']
     return Review.objects.filter(watchlist=pk)
@@ -40,6 +41,7 @@ class ReviewList(generics.ListAPIView):
 class ReviewDetial(generics.RetrieveUpdateDestroyAPIView):
   queryset =  Review.objects.all()
   serializer_class = ReviewSerializers
+  permission_classes = [IsAuthenticated]
 
 # class ReviewDetial(mixins.RetrieveModelMixin, generics.GenericAPIView):
 #   queryset =  Review.objects.all()
