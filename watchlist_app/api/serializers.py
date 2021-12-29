@@ -1,24 +1,36 @@
 import re
 from django.db import models
+from django.db.models import fields
 from rest_framework import serializers
 
-from watchlist_app.models import WatchList,SteamPlatform
+from watchlist_app.models import Review, WatchList,SteamPlatform
 
+
+class ReviewSerializers(serializers.ModelSerializer):
+
+  class Meta:
+    model = Review
+    fields = "__all__"
 
 
 class WatchListSerializers(serializers.ModelSerializer):
   # len_name = serializers.SerializerMethodField()
+  reviews = ReviewSerializers(many=True,read_only=True)
   
   class Meta:
     model =  WatchList
     fields = "__all__"
 
 class SteamPlatformSerializers(serializers.ModelSerializer):
+
   watchlist = WatchListSerializers(many=True,read_only= True)
 
   class Meta:
     model = SteamPlatform
     fields = "__all__"
+
+
+
 
   # def get_len_name(self,object):
   #   return len(object.name)

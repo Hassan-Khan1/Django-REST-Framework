@@ -7,3 +7,4 @@ from watchlist_app.models import *
 admin.site.register(WatchList)
 
 admin.site.register(SteamPlatform)
+admin.site.register(Review)
