@@ -1,12 +1,33 @@
 import re
 from rest_framework import HTTP_HEADER_ENCODING, serializers, views
-from watchlist_app.models import WatchList,SteamPlatform
-from watchlist_app.api.serializers import WatchListSerializers,SteamPlatformSerializers
+from watchlist_app.models import Review, WatchList,SteamPlatform
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework import mixins
+from watchlist_app.api.serializers import (ReviewSerializers, WatchListSerializers,
+                                           SteamPlatformSerializers)
 
+class ReviewDetial(mixins.RetrieveModelMixin, generics.GenericAPIView):
+  queryset =  Review.objects.all()
+  serializer_class = ReviewSerializers
+  
+  def get(self, request, *args, **kwargs):
+      return self.retrieve(request, *args, **kwargs)
+
+
+class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    
+    queryset =  Review.objects.all()
+    serializer_class = ReviewSerializers
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 class SteamPlatformAV(APIView):
 
