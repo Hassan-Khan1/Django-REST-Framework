@@ -32,16 +32,17 @@ class  ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListAPIView):
   # queryset =  Review.objects.all()
   serializer_class = ReviewSerializers
-  permission_classes = [IsAuthenticated]
+  # permission_classes = [IsAuthenticated]
   def get_queryset(self):
     pk = self.kwargs['pk']
     return Review.objects.filter(watchlist=pk)
 
+#  "proxy": "http://127.0.0.1:8000"
 
 class ReviewDetial(generics.RetrieveUpdateDestroyAPIView):
   queryset =  Review.objects.all()
   serializer_class = ReviewSerializers
-  permission_classes = [IsAuthenticated]
+  # permission_classes = [IsAuthenticated]
 
 # class ReviewDetial(mixins.RetrieveModelMixin, generics.GenericAPIView):
 #   queryset =  Review.objects.all()
