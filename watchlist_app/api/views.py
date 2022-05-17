@@ -41,3 +41,4 @@ def movie_details(request,pk):
     movie = Movie.objects.get(pk=pk)
     movie.delete()
     return Response()
+
